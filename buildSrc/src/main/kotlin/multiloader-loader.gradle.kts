@@ -28,6 +28,11 @@ tasks.named<JavaCompile>("compileJava") {
     source(configurations["commonJava"])
 }
 
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+    dependsOn(configurations["commonJava"])
+    source(configurations["commonJava"])
+}
+
 tasks.named<ProcessResources>("processResources") {
     dependsOn(configurations["commonResources"])
     from(configurations["commonResources"])
@@ -35,7 +40,7 @@ tasks.named<ProcessResources>("processResources") {
 
 tasks.named<Javadoc>("javadoc") {
     dependsOn(configurations["commonJava"])
-    source(configurations["commonJava"])
+    source(configurations["commonJava"].filter {it.name.endsWith(".java")})
 }
 
 tasks.named<Jar>("sourcesJar") {
