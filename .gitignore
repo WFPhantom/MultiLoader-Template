@@ -5,20 +5,47 @@ bin
 .metadata
 .classpath
 .project
+.apt_generated
+.eclipse/
+.factorypath
+.springBeans
+.sts4-cache
+!**/src/**/bin/
 
 # idea
 out
 *.ipr
 *.iws
 *.iml
-.idea/*
+.idea/
 !.idea/scopes
+!**/src/**/out/
+.run/
+
+# vscode
+.settings/
+.vscode/
+bin/
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
 
 # gradle
-build
-.gradle
+.gradle/
+build/
+out/
+classes/
 
 # other
 eclipse
-run
-runs
+run/
+runs/
+*.DS_Store
+!**/src/**/run/
+**/src/generated/**/.cache/
+repo/
+!**/src/**/repo/

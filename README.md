@@ -1,4 +1,6 @@
-# MultiLoader Template
+# MultiLoader Template (Kotlin-DSL)
+
+(a very *probably* butchered) Multiloader template based on Jaredlll08's [MultiLoader Template](https://github.com/jaredlll08/MultiLoader-Template) but using Kotlin DSL. Below is the original readme.
 
 This project provides a Gradle project template that can compile Minecraft mods for multiple modloaders using a common project for the sources. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project, please join our [Discord](https://discord.myceliummod.network).
 

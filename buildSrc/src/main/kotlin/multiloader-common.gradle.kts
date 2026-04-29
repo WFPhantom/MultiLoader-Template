@@ -1,6 +1,7 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
+    `java-library`
+    `maven-publish`
+    id("org.jetbrains.kotlin.jvm")
 }
 
 base {
@@ -13,21 +14,21 @@ java {
     withJavadocJar()
 }
 
+kotlin {
+    jvmToolchain(java_version)
+}
+
 repositories {
     mavenCentral()
     // https://docs.gradle.org/current/userguide/declaring_repositories.html#declaring_content_exclusively_found_in_one_repository
     exclusiveContent {
         forRepository {
             maven {
-                name = 'Sponge'
-                url = 'https://repo.spongepowered.org/repository/maven-public'
+                name = "Sponge"
+                url = "https://repo.spongepowered.org/repository/maven-public"
             }
         }
-        filter { includeGroupAndSubgroups('org.spongepowered') }
-    }
-    maven {
-        name = 'BlameJared'
-        url = 'https://maven.blamejared.com'
+        filter { includeGroupAndSubgroups('org.spongepowered) }
     }
 }
 
@@ -45,11 +46,11 @@ jar {
     manifest {
         attributes([
                 'Specification-Title'   : mod_name,
-                'Specification-Vendor'  : mod_author,
+                'Specification-Vendor'  : mod_authors,
                 'Specification-Version' : project.jar.archiveVersion,
                 'Implementation-Title'  : project.name,
                 'Implementation-Version': project.jar.archiveVersion,
-                'Implementation-Vendor' : mod_author,
+                'Implementation-Vendor' : mod_authors,
                 'Built-On-Minecraft'    : minecraft_version
         ])
     }
@@ -61,17 +62,20 @@ processResources {
             'group'                        : project.group, //Else we target the task's group.
             'minecraft_version'            : minecraft_version,
             'minecraft_version_range'      : minecraft_version_range,
-            'fabric_version'               : fabric_version,
             'fabric_loader_version'        : fabric_loader_version,
+            'fabric_api_version'           : fabric_api_version,
+            'neoforge_version'             : neoforge_version,
             'mod_name'                     : mod_name,
-            'mod_author'                   : mod_author,
+            'mod_authors'                  : mod_authors,
             'mod_id'                       : mod_id,
             'license'                      : license,
             'description'                  : project.description,
-            'neoforge_version'             : neoforge_version,
-            'neoforge_loader_version_range': neoforge_loader_version_range,
             'credits'                      : credits,
-            'java_version'                 : java_version
+            'java_version'                 : java_version,
+            'issue_tracker'                : issue_tracker,
+            'homepage'                     : homepage,
+            'logo'                         : logo,
+            'update_json_url'              : update_json_url
     ]
 
     var jsonExpandProps = expandProps.collectEntries {

@@ -5,14 +5,14 @@
     "name": "${mod_name}",
     "description": "${description}",
     "authors": [
-        "${mod_author}"
+        "${mod_authors}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "${homepage}",
+        "issues": "${issue_tracker}"
     },
     "license": "${license}",
-    "icon": "${mod_id}.png",
+    "icon": "${logo}",
     "environment": "*",
     "entrypoints": {
         "main": [
