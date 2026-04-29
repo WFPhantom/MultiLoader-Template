@@ -3,43 +3,44 @@ plugins {
 }
 
 configurations {
-    commonJava{
-        canBeResolved = true
+    create("commonJava") {
+        isCanBeResolved = true
     }
-    commonResources{
-        canBeResolved = true
+    create("commonResources") {
+        isCanBeResolved = true
     }
 }
+
+val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
 
 dependencies {
-    compileOnly(project(':common')) {
-        def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+    compileOnly(project(":common")) {
         attributes {
-            attribute(loaderAttribute, 'common')
+            attribute(loaderAttribute, "common")
         }
     }
-    commonJava project(path: ':common', configuration: 'commonJava')
-    commonResources project(path: ':common', configuration: 'commonResources')
+    add("commonJava", project(path = ":common", configuration = "commonJava"))
+    add("commonResources", project(path = ":common", configuration = "commonResources"))
 }
 
-tasks.named('compileJava', JavaCompile) {
-    dependsOn(configurations.commonJava)
-    source(configurations.commonJava)
+tasks.named<JavaCompile>("compileJava") {
+    dependsOn(configurations["commonJava"])
+    source(configurations["commonJava"])
 }
 
-processResources {
-    dependsOn(configurations.commonResources)
-    from(configurations.commonResources)
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(configurations["commonResources"])
+    from(configurations["commonResources"])
 }
 
-tasks.named('javadoc', Javadoc).configure {
-    dependsOn(configurations.commonJava)
-    source(configurations.commonJava)
+tasks.named<Javadoc>("javadoc") {
+    dependsOn(configurations["commonJava"])
+    source(configurations["commonJava"])
 }
 
-tasks.named('sourcesJar', Jar) {
-    dependsOn(configurations.commonJava)
-    from(configurations.commonJava)
-    dependsOn(configurations.commonResources)
-    from(configurations.commonResources)
+tasks.named<Jar>("sourcesJar") {
+    dependsOn(configurations["commonJava"])
+    from(configurations["commonJava"])
+    dependsOn(configurations["commonResources"])
+    from(configurations["commonResources"])
 }

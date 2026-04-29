@@ -5,17 +5,17 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${"mod_id"()}-${project.name}-${"minecraft_version"()}"
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+    toolchain.languageVersion = JavaLanguageVersion.of("java_version"())
     withSourcesJar()
     withJavadocJar()
 }
 
 kotlin {
-    jvmToolchain(java_version)
+    jvmToolchain("java_version"().toInt())
 }
 
 repositories {
@@ -25,69 +25,70 @@ repositories {
         forRepository {
             maven {
                 name = "Sponge"
-                url = "https://repo.spongepowered.org/repository/maven-public"
+                url = uri("https://repo.spongepowered.org/repository/maven-public")
             }
         }
-        filter { includeGroupAndSubgroups('org.spongepowered) }
+        filter { includeGroupAndSubgroups("org.spongepowered") }
     }
 }
 
-sourcesJar {
-    from(rootProject.file('LICENSE')) {
-        rename { "${it}_${mod_name}" }
+
+tasks.named<Jar>("sourcesJar") {
+    from(rootProject.file("LICENSE")) {
+        rename { "${it}_${"mod_name"()}" }
     }
 }
 
-jar {
-    from(rootProject.file('LICENSE')) {
-        rename { "${it}_${mod_name}" }
+tasks.named<Jar>("jar") {
+    from(rootProject.file("LICENSE")) {
+        rename { "${it}_${"mod_name"()}" }
     }
 
     manifest {
-        attributes([
-                'Specification-Title'   : mod_name,
-                'Specification-Vendor'  : mod_authors,
-                'Specification-Version' : project.jar.archiveVersion,
-                'Implementation-Title'  : project.name,
-                'Implementation-Version': project.jar.archiveVersion,
-                'Implementation-Vendor' : mod_authors,
-                'Built-On-Minecraft'    : minecraft_version
-        ])
+        attributes(
+            "Specification-Title" to "mod_name"(),
+            "Specification-Vendor" to "mod_authors"(),
+            "Specification-Version" to project.version,
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to project.version,
+            "Implementation-Vendor" to "mod_authors"(),
+            "Built-On-Minecraft" to "minecraft_version"()
+        )
     }
 }
 
-processResources {
-    var expandProps = [
-            'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
-            'minecraft_version'            : minecraft_version,
-            'minecraft_version_range'      : minecraft_version_range,
-            'fabric_loader_version'        : fabric_loader_version,
-            'fabric_api_version'           : fabric_api_version,
-            'neoforge_version'             : neoforge_version,
-            'mod_name'                     : mod_name,
-            'mod_authors'                  : mod_authors,
-            'mod_id'                       : mod_id,
-            'license'                      : license,
-            'description'                  : project.description,
-            'credits'                      : credits,
-            'java_version'                 : java_version,
-            'issue_tracker'                : issue_tracker,
-            'homepage'                     : homepage,
-            'logo'                         : logo,
-            'update_json_url'              : update_json_url
-    ]
+tasks.named<ProcessResources>("processResources") {
+    val expandProps = mapOf(
+        "version" to project.version,
+        "group" to project.group, //Else we target the task's group.
+        "minecraft_version" to "minecraft_version"(),
+        "minecraft_version_range" to "minecraft_version_range"(),
+        "fabric_loader_version" to "fabric_loader_version"(),
+        "fabric_api_version" to "fabric_api_version"(),
+        "neoforge_version" to "neoforge_version"(),
+        "mod_name" to "mod_name"(),
+        "mod_authors" to "mod_authors"(),
+        "mod_id" to "mod_id"(),
+        "license" to "license"(),
+        "description" to project.description,
+        "credits" to "credits"(),
+        "java_version" to "java_version"(),
+        "issue_tracker" to "issue_tracker"(),
+        "homepage" to "homepage"(),
+        "logo" to "logo"(),
+        "update_json_url" to "update_json_url"()
+    )
 
-    var jsonExpandProps = expandProps.collectEntries {
-        key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
+    val jsonExpandProps = expandProps.mapValues { (_, value) ->
+        if (value is String) value.replace("\n", "\\\\n") else value
     }
 
-    filesMatching(['META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
-        expand expandProps
+    filesMatching(listOf("META-INF/mods.toml", "META-INF/neoforge.mods.toml")) {
+        expand(expandProps)
     }
 
-    filesMatching(['pack.mcmeta', 'fabric.mod.json', '*.mixins.json']) {
-        expand jsonExpandProps
+    filesMatching(listOf("pack.mcmeta", "fabric.mod.json", "*.mixins.json")) {
+        expand(jsonExpandProps)
     }
 
     inputs.properties(expandProps)
@@ -95,14 +96,22 @@ processResources {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
+        register<MavenPublication>("mavenJava") {
+            artifactId = base.archivesName.get()
+            from(components["java"])
         }
     }
     repositories {
-        maven {
-            url System.getenv('local_maven_url')
+        val localMavenUrl = System.getenv("local_maven_url")
+        if (localMavenUrl != null) {
+            maven {
+                url = uri(localMavenUrl)
+            }
         }
     }
+}
+
+// THANK YOU IThundxr i love you
+operator fun String.invoke(): String {
+    return project.properties[this] as? String ?: throw IllegalStateException("Property $this is not defined")
 }
