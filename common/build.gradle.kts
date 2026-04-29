@@ -32,6 +32,7 @@ configurations {
 
 artifacts {
     add("commonJava", sourceSets.main.get().java.sourceDirectories.singleFile)
+    sourceSets.main.get().kotlin.sourceDirectories.forEach { dir -> add("commonJava", dir) }
     add("commonResources", sourceSets.main.get().resources.sourceDirectories.singleFile)
 }
 
