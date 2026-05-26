@@ -24,6 +24,18 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-include("common")
-include("fabric")
-include("neoforge")
+val modId = providers.gradleProperty("mod_id").get()
+
+includeBuild("build-logic")
+
+rootDir.listFiles()?.filter {
+    it.isDirectory()
+            && it.name != "build-logic"
+            && (File(it, "build.gradle").exists() || File(it, "build.gradle.kts").exists())
+}?.forEach {
+    val relativePath = rootDir.toPath().relativize(it.toPath()).toString()
+    val projectName = ":$modId-$relativePath"
+
+    include(projectName)
+    project(projectName).projectDir = it
+}

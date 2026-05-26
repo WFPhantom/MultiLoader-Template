@@ -19,7 +19,7 @@ loom {
     //        sourceSet(sourceSets.client)
     //    }
     //}
-    val aw = project(":common").file("src/main/resources/${"mod_id"()}.accesswidener")
+    val aw = project(":${"mod_id"()}-common").file("src/main/resources/${"mod_id"()}.accesswidener")
     if (aw.exists()) accessWidenerPath.set(aw)
 }
 // Optional datagen, see https://wiki.fabricmc.net/tutorial:datagen_setup

@@ -4,10 +4,6 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
 }
 
-base {
-    archivesName = "${"mod_id"()}-${project.name}-${"minecraft_version"()}"
-}
-
 java {
     toolchain.languageVersion = JavaLanguageVersion.of("java_version"())
     withSourcesJar()
@@ -23,27 +19,20 @@ repositories {
     // https://docs.gradle.org/current/userguide/declaring_repositories.html#declaring_content_exclusively_found_in_one_repository
     exclusiveContent {
         forRepository {
-            maven {
-                name = "Sponge"
-                url = uri("https://repo.spongepowered.org/repository/maven-public")
-            }
+            maven {url = uri("https://maven.fabricmc.net") }
         }
-        filter { includeGroupAndSubgroups("org.spongepowered") }
+        filter { includeGroupAndSubgroups("net.fabricmc.sponge-mixin") }
     }
 }
 
 
-tasks.named<Jar>("sourcesJar") {
+tasks.withType<Jar>().configureEach {
     from(rootProject.file("LICENSE")) {
         rename { "${it}_${"mod_name"()}" }
     }
 }
 
 tasks.named<Jar>("jar") {
-    from(rootProject.file("LICENSE")) {
-        rename { "${it}_${"mod_name"()}" }
-    }
-
     manifest {
         attributes(
             "Specification-Title" to "mod_name"(),
@@ -97,7 +86,6 @@ tasks.named<ProcessResources>("processResources") {
 publishing {
     publications {
         register<MavenPublication>("mavenJava") {
-            artifactId = base.archivesName.get()
             from(components["java"])
         }
     }
@@ -111,7 +99,7 @@ publishing {
     }
 }
 
-// THANK YOU IThundxr i love you
+// THANK YOU IThundxr I love you
 operator fun String.invoke(): String {
     return project.properties[this] as? String ?: throw IllegalStateException("Property $this is not defined")
 }
