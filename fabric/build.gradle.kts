@@ -31,7 +31,7 @@ loom {
 
 // Implement mcgradleconventions loader attribute
 val loaderAttribute = Attribute.of("io.github.mcgradleconventions.loader", String::class.java)
-listOf("apiElements", "runtimeElements", "sourcesElements", "javadocElements", "includeInternal", "modCompileClasspath").forEach { variant ->
+listOf("apiElements", "runtimeElements", "sourcesElements", "javadocElements", "modCompileClasspath").forEach { variant ->
     configurations.named(variant) {
         attributes {
             attribute(loaderAttribute, "fabric")
