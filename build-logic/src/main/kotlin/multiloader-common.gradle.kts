@@ -14,17 +14,7 @@ kotlin {
     jvmToolchain("java_version"().toInt())
 }
 
-repositories {
-    mavenCentral()
-    // https://docs.gradle.org/current/userguide/declaring_repositories.html#declaring_content_exclusively_found_in_one_repository
-    exclusiveContent {
-        forRepository {
-            maven {url = uri("https://maven.fabricmc.net") }
-        }
-        filter { includeGroupAndSubgroups("net.fabricmc.sponge-mixin") }
-    }
-}
-
+repositories {}
 
 tasks.withType<Jar>().configureEach {
     from(rootProject.file("LICENSE")) {
