@@ -2,7 +2,7 @@ plugins {
     id("multiloader-common")
 }
 
-val commonPath = ":${project.properties["mod_id"]}-common"
+val commonPath = ":${providers.gradleProperty("mod_id").get()}-common"
 
 configurations {
     create("commonJava") {
