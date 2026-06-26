@@ -5,6 +5,10 @@ plugins {
 }
 
 neoForge {
+    parchment{
+        minecraftVersion = "1.21.1"
+        mappingsVersion = "2024.11.17"
+    }
     version = "neoforge_version"()
     // Automatically enable neoforge AccessTransformers if the file exists
     val at = project(":${"mod_id"()}-common").file("src/main/resources/META-INF/accesstransformer.cfg")
@@ -25,7 +29,7 @@ neoForge {
             type = "gameTestServer"
         }
         create("data") {
-            clientData()
+            data()
             // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll("--mod", "mod_id"(), "--all", "--output", file("src/generated/resources/").absolutePath, "--existing", file("src/main/resources/").absolutePath)

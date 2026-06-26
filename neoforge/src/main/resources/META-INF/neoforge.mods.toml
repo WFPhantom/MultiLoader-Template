@@ -1,3 +1,6 @@
+modLoader="javafml"
+loaderVersion="[1,)" #mandatory
+
 license = "${license}"
 #issueTrackerURL="${issue_tracker}"
 [[mods]]
