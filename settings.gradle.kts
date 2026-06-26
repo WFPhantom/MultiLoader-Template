@@ -27,15 +27,11 @@ plugins {
 val modId = providers.gradleProperty("mod_id").get()
 
 includeBuild("build-logic")
+include("$modId-common")
+project(":$modId-common").projectDir = file("common")
 
-rootDir.listFiles()?.filter {
-    it.isDirectory()
-            && it.name != "build-logic"
-            && (File(it, "build.gradle").exists() || File(it, "build.gradle.kts").exists())
-}?.forEach {
-    val relativePath = rootDir.toPath().relativize(it.toPath()).toString()
-    val projectName = ":$modId-$relativePath"
+include("$modId-fabric")
+project(":$modId-fabric").projectDir = file("fabric")
 
-    include(projectName)
-    project(projectName).projectDir = it
-}
+include("$modId-neoforge")
+project(":$modId-neoforge").projectDir = file("neoforge")
