@@ -98,7 +98,7 @@ sourceSets.configureEach {
 // a dependency that will be present for runtime testing but that is
 // "optional", meaning it will not be pulled by dependents of this mod.
 configurations {
-    val localRuntime by creating
+    val localRuntime = create("localRuntime")
     named("runtimeClasspath") {
         extendsFrom(localRuntime)
     }
@@ -117,5 +117,5 @@ idea {
 }
 
 operator fun String.invoke(): String {
-    return project.properties[this] as? String ?: throw IllegalStateException("Property $this is not defined")
+    return providers.gradleProperty(this).orNull ?: throw IllegalStateException("Property $this is not defined")
 }
