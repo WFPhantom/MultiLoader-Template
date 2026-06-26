@@ -3,7 +3,7 @@ plugins {
     id("net.neoforged.moddev")
 }
 
-val neo_form_version: String by project
+val neo_form_version = project.property("neo_form_version") as String
 
 neoForge {
     neoFormVersion = neo_form_version

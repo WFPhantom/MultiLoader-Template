@@ -91,5 +91,5 @@ publishing {
 
 // THANK YOU IThundxr I love you
 operator fun String.invoke(): String {
-    return project.properties[this] as? String ?: throw IllegalStateException("Property $this is not defined")
+    return providers.gradleProperty(this).orNull ?: throw IllegalStateException("Property $this is not defined")
 }
