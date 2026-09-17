@@ -1,4 +1,5 @@
 license = "${license}"
+#licenseURL = ""
 #issueTrackerURL="${issue_tracker}"
 [[mods]]
 modId = "${mod_id}"
@@ -6,7 +7,8 @@ version = "${version}"
 displayName = "${mod_name}"
 #updateJSONURL="${update_json_url}"
 #displayURL="${homepage}" # Displayed in the mod UI
-#logoFile="${logo}"
+#iconFile="${logo}"
+#bannerFile=""
 credits="${credits}"
 authors = "${mod_authors}" #optional
 description = '''${description}'''
